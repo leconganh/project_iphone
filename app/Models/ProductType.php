@@ -25,6 +25,13 @@ class ProductType extends Model
         return $productType;
     }
 
+    public function allProductType()
+    {
+        $productType = ProductType::all();
+
+        return $productType;
+    }
+
     public function addProductType($input)
     {
         $input['slug'] = utf8tourl($input['name']);

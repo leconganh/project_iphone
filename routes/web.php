@@ -31,6 +31,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function () {
     Route::get('show_productType', 'ProductTypeController@view_show');
 
     Route::resource('product', 'ProductController');
+    Route::get('show_product', 'ProductController@view_show');
 
 });
 

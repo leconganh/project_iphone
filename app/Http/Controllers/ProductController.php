@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use http\Env\Response;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\ProductType;
@@ -10,6 +11,25 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
+    protected $productType;
+    protected $category;
+    protected $product;
+
+    public function __construct(ProductType $productType, Category $category , Product $product)
+    {
+        $this->productType = $productType;
+        $this->category = $category;
+        $this->product = $product;
+    }
+
+    public function view_show()
+    {
+        $product = $this->product->showViewProduct();
+        $category = $this->category->allCategory();
+        $productType = $this->productType->allProductType();
+
+        return response()->json(['product'=>$product,'category'=>$category,'productType'=>$productType],200);
+    }
 
     /**
      * Display a listing of the resource.
@@ -18,9 +38,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product::where('status',1)->get();
+        $product = $this->product->allProduct();
+        $category = $this->category->allCategory();
+        $productType = $this->productType->allProductType();
 
-        return view('admin.pages.product.list',['product'=>$product]);
+        return view('admin.pages.product.list',['product'=>$product,'category'=>$category,'productType'=>$productType]);
     }
 
     /**
@@ -30,8 +52,8 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $category = Category::where('status',1)->get();
-        $productType = ProductType::where('status',1)->get();
+        $category = $this->category->allCategory();
+        $productType = $this->productType->allProductType();
 
         return view('admin.pages.product.add',['category'=>$category,'productType'=>$productType]);
 

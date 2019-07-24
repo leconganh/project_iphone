@@ -8,6 +8,8 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Loại sản phẩm</h6>
+            <button class="btn btn-dark float-right add" data-toggle="modal" data-target="#add-productype" type="button"
+                    data-id=""><i class="fas fa-plus-circle"></i></button>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -30,6 +32,54 @@
             {{ $productType->links()}}
         </div>
     </div>
+
+    <div class="modal fade" id="add-productype" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thêm loại sản phẩm : <span class="title"></span></h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row" style="margin: 5px">
+                        <div class="col-lg-12">
+                            <form role="form" id="form-AddProduct-Type" action="" method="post">
+                                @csrf
+                                <fieldset class="form-group">
+                                    <label>Tên</label>
+                                    <input class="form-control name-productype" name="name"
+                                           placeholder="Nhập tên loại sản phẩm">
+                                    <div class="error"
+                                         style="color: red ; font-size: 1rem;width:100%; margin-top: 10px"></div>
+                                </fieldset>
+                                <div class="form-group">
+                                    <label>Thư mục sản phẩm </label>
+                                    <select class="form-control" name="id_category">
+                                        @foreach($category as $value)
+                                            <option value="{{$value->id}}">{{$value->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Trạng thái</label>
+                                    <select class="form-control status" name="status">
+                                        <option value="1">Hiển Thị</option>
+                                        <option value="0"> Không Hiển Thị</option>
+                                    </select>
+                                </div>
+                                <input type="submit" class="btn btn-success " value="Thêm">
+                                <button class="btn btn-secondary " type="reset" data-dismiss="modal">Làm mới</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
          aria-hidden="true">
         <div class="modal-dialog" role="document">

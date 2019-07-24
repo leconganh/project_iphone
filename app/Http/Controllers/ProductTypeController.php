@@ -35,8 +35,9 @@ class ProductTypeController extends Controller
     public function index()
     {
         $productType = $this->productType->showViewProductType();
+        $category = $this->category->allCategory();
 
-        return view('admin.pages.producType.list', ['productType' => $productType]);
+        return view('admin.pages.producType.list', ['productType' => $productType,'category' => $category]);
     }
 
     /**
@@ -60,9 +61,9 @@ class ProductTypeController extends Controller
     public function store(StoreProductType $request)
     {
         $input = $request->all();
-        $this->productType->addProductType($input);
+        $productType =  $this->productType->addProductType($input);
 
-        return redirect()->route('productType.index')->with('thongbao', 'Thêm thành công loại sản phẩm.');
+        return response()->json([$productType, 'message' => 'them thành công'], 200);
 
     }
 

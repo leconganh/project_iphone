@@ -40,7 +40,7 @@ jQuery(document).ready(function ($) {
 		                        	<button class="btn btn-danger delete" title="Xoa ` + row.name + `"data-toggle="modal" data-target="#delete" type="button" data-id = "` + row.id + `"><i class="fas fa-trash-alt" ></i></button>
 		                        </td>
 		                    </tr>`
-                    $('#category-crud').prepend(object);
+                    $('#category-crud').append(object);
                 })
             }
         });
@@ -71,7 +71,51 @@ jQuery(document).ready(function ($) {
 		                        	<button class="btn btn-danger deleteProductType" title="Xoá` + value.name + `"data-toggle="modal" data-target="#delete" type="button" data-id = "` + value.id + `"><i class="fas fa-trash-alt" ></i></button>
 		                        </td>
 		                    </tr>`
-                    $('#productType-crud').prepend(object);
+                    $('#productType-crud').append(object);
+                });
+            }
+        });
+    }
+
+    function showProduct() {
+        $.ajax({
+            url: 'admin/show_product?page=' + GetURLParameter('page'),
+            type: 'get',
+            dataType: 'json',
+            success: function (result) {
+                console.log(result.product);
+                $('#product-crud').empty();
+                $.each(result.product.data, function (key, value) {
+                    var category = result.category.filter(function (check) {
+                        return check.id == value.id_category;
+                    });
+                    var productType = result.productType.filter(function (check) {
+                        return check.id == value.id_product_type;
+                    });
+
+                    var status = (value.status == 1) ? 'Hiện thị' : 'Không hiển thị'
+                    var object =
+                            `<tr>
+                                <td>`+value.id+`</td>
+                                <td>`+value.name+`</td>
+                                <td>
+                                    <b>Số lượng</b> : `+value.quantity+`
+                                    <br>
+                                    <b>Đơn giá</b> : `+value.price+`
+                                    <br>
+                                    <b>Khuyến mại</b> : `+value.promotional+`
+                                    <img src="images/upload/product/`+value.image+`" width="200px" height="200px" alt="">
+                                </td>
+                                <td>`+status+`
+                                </td>
+                                <td>`+category[0].name+`</td>
+                                <td>`+productType[0].name+`</td>
+		                       	<td>
+		                        	<button class="btn btn-primary editProduct" title="Sửa` + value.name + `"data-toggle="modal" data-target="#edit" type="button" data-id = "` + value.id + `"><i class="fas fa-edit" ></i></button>
+		                        	<button class="btn btn-danger deleteProduct" title="Xoá` + value.name + `"data-toggle="modal" data-target="#delete" type="button" data-id = "` + value.id + `"><i class="fas fa-trash-alt" ></i></button>
+		                        </td>
+		                    </tr>`
+                    $('#product-crud').append(object);
                 });
             }
         });
@@ -83,9 +127,9 @@ jQuery(document).ready(function ($) {
     $('#form-Add').on('submit', function (event) {
         event.preventDefault();
         $.ajax({
-            url:'admin/category',
-            type:'POST',
-            dataType: 'json' ,
+            url: 'admin/category',
+            type: 'POST',
+            dataType: 'json',
             data: new FormData(this),
             contentType: false,
             processData: false,
@@ -163,6 +207,33 @@ jQuery(document).ready(function ($) {
         });
     });
     showProductType()
+
+    $('#form-AddProduct-Type').on('submit', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: 'admin/productType',
+            type: 'POST',
+            dataType: 'json',
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (data) {
+                $('#form-AddProduct-Type')[0].reset();
+                toastr.success(data.success, 'Thông báo', {timeOut: 5000});
+                $('#add-productype').modal('hide');
+                showProductType();
+            },
+            error: function (data) {
+                console.log(data);
+                let error = $.parseJSON(data.responseText);
+                console.log(error);
+                $('.error').show();
+                $('.error').text(error.errors.name);
+            }
+        });
+    });
+
     $('body').on('click', '.editProductType', function () {
         $('.error').hide();
         /* Act on the event */
@@ -195,7 +266,7 @@ jQuery(document).ready(function ($) {
         $.ajax({
             url: 'admin/productType/' + update_id,
             type: 'put',
-            dataType:'json',
+            dataType: 'json',
             data: $('#ProductTypeForm').serialize(),
             success: function (result) {
                 toastr.success(result.success, 'Sửa thành công', {timeOut: 5000});
@@ -219,7 +290,7 @@ jQuery(document).ready(function ($) {
             $.ajax({
                 url: 'admin/productType/' + id,
                 type: 'delete',
-                dataType:'json',
+                dataType: 'json',
                 success: function (result) {
                     toastr.success(result.success, 'Thông báo', {timeOut: 5000});
                     $('#delete').modal('hide');
@@ -227,6 +298,34 @@ jQuery(document).ready(function ($) {
                     showProductType()
                 },
             })
+        });
+    });
+
+    showProduct();
+
+    $('#form-AddProduct').on('submit', function (event) {
+        event.preventDefault();
+        $.ajax({
+            url: 'admin/product',
+            type: 'POST',
+            dataType: 'json',
+            data: new FormData(this),
+            contentType: false,
+            processData: false,
+            cache: false,
+            success: function (data) {
+                $('#form-AddProduct')[0].reset();
+                toastr.success(data.success, 'Thông báo', {timeOut: 5000});
+                $('#add-product').modal('hide');
+                showProduct();
+            },
+            error: function (data) {
+                console.log(data);
+                let error = $.parseJSON(data.responseText);
+                console.log(error);
+                $('.error').show();
+                $('.error').text(error.errors.name);
+            }
         });
     });
 

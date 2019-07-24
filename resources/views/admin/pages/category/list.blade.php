@@ -60,7 +60,7 @@
                                         <option value="0"> Không Hiển Thị</option>
                                     </select>
                                 </div>
-                                <input type="submit" class="btn btn-success " value="them">
+                                <input type="submit" class="btn btn-success " value="Thêm ">
                                 <button class="btn btn-secondary " type="reset" data-dismiss="modal">Làm mới</button>
                             </form>
                         </div>

@@ -113,12 +113,12 @@ class UserController extends Controller
         $data = $request->only('email', 'password');
         if (Auth::attempt($data, $request->has('remember'))) {
             if (Auth::user()->role == 1) {
-                return redirect()->route('category.index')->with('thongbao','Đăng nhập thành công ');
+                return redirect()->route('category.index')->with('thongbao', 'Đăng nhập thành công ');
             } else {
-                return redirect('admin/login')->with('error','Đăng nhập thất bại');
+                return redirect('admin/login')->with('error', 'Đăng nhập thất bại');
             }
         } else {
-            return redirect('admin/login')->with('error','Đăng nhập thất bại');
+            return redirect('admin/login')->with('error', 'Đăng nhập thất bại');
         }
 
     }

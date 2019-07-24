@@ -16,8 +16,23 @@ class Product extends Model
     {
     	return $this->belongsTo('App\Models\ProductType','id_product_type','id');
     }
+
     public function Categories()
     {
     	return $this->belongsTo('App\Models\Category','id_category','id');
+    }
+
+    public function showViewProduct()
+    {
+        $product = Product::paginate(5);
+
+        return $product;
+    }
+
+    public function allProduct()
+    {
+        $product = Product::where('status',1)->get();
+
+        return $product;
     }
 }
